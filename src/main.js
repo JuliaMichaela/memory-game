@@ -2,6 +2,7 @@ import { CARDS_DATA } from './cards-data.js';
 import { createDeck } from './deck.js';
 import { createElement } from './dom.js';
 import { createGame } from './game.js';
+import { createModal } from './modal.js';
 import {
   createBoard,
   createCards,
@@ -12,6 +13,7 @@ import {
 } from './render.js';
 
 function init() {
+  const modal = createModal();
   const stats = createStats(CARDS_DATA.length);
   const board = createBoard([]);
   const cardElements = new Map();
@@ -37,6 +39,15 @@ function init() {
     renderBoard();
   }
 
+  function showLeaderboard(returnFocus) {
+    modal.open({
+      title: 'Leaderboard',
+      content: createElement('p', { className: 'modal__text', text: 'No results yet' }),
+      actions: [{ text: 'Close', primary: true }],
+      returnFocus,
+    });
+  }
+
   board.addEventListener('click', (event) => {
     const cardElement = event.target.closest('.card');
     if (cardElement) {
@@ -48,7 +59,7 @@ function init() {
 
   document.body.append(
     createElement('div', { className: 'app' }, [
-      createHeader({ onNewGame: startNewGame }),
+      createHeader({ onNewGame: startNewGame, onLeaderboard: showLeaderboard }),
       createElement('main', { className: 'main' }, [stats, board]),
     ]),
   );

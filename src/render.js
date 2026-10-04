@@ -1,6 +1,6 @@
 import { createElement } from './dom.js';
 
-export function createHeader({ onNewGame } = {}) {
+export function createHeader({ onNewGame, onLeaderboard } = {}) {
   const newGameButton = createElement('button', {
     className: 'button button--primary',
     text: 'New Game',
@@ -8,15 +8,18 @@ export function createHeader({ onNewGame } = {}) {
   });
   newGameButton.addEventListener('click', () => onNewGame?.());
 
+  const leaderboardButton = createElement('button', {
+    className: 'button',
+    text: 'Leaderboard',
+    attrs: { type: 'button' },
+  });
+  leaderboardButton.addEventListener('click', () => onLeaderboard?.(leaderboardButton));
+
   return createElement('header', { className: 'header' }, [
     createElement('h1', { className: 'header__title', text: 'Memory Game' }),
     createElement('div', { className: 'header__actions' }, [
       newGameButton,
-      createElement('button', {
-        className: 'button',
-        text: 'Leaderboard',
-        attrs: { type: 'button' },
-      }),
+      leaderboardButton,
     ]),
   ]);
 }

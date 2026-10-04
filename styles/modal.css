@@ -1,0 +1,62 @@
+body.scroll-locked {
+  overflow: hidden;
+}
+
+/* The dialog itself covers the viewport; its ::backdrop is the dimmed background. */
+.modal {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: var(--gap);
+  border: 0;
+  color: var(--text);
+  background: transparent;
+}
+
+.modal[open] {
+  display: grid;
+  place-items: center;
+}
+
+.modal::backdrop {
+  background: rgba(3, 6, 20, 0.5);
+}
+
+.modal__window {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(100%, 440px);
+  max-height: 100%;
+  padding: clamp(16px, 5vw, 28px);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  overflow-y: auto;
+  background: var(--panel);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
+
+.modal__title {
+  margin: 0;
+  font-size: clamp(1.25rem, 5vw, 1.6rem);
+  text-align: center;
+}
+
+.modal__body {
+  color: var(--muted);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.modal__text {
+  margin: 0;
+}
+
+.modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
