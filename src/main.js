@@ -2,23 +2,40 @@ import { CARDS_DATA } from './cards-data.js';
 import { createDeck } from './deck.js';
 import { createElement } from './dom.js';
 import { createGame } from './game.js';
-import { createBoard, createHeader, createStats, updateCard, updateStats } from './render.js';
+import {
+  createBoard,
+  createCards,
+  createHeader,
+  createStats,
+  updateCard,
+  updateStats,
+} from './render.js';
 
 function init() {
-  const deck = createDeck();
   const stats = createStats(CARDS_DATA.length);
-  const board = createBoard(deck);
+  const board = createBoard([]);
+  const cardElements = new Map();
 
-  const cardElements = new Map(
-    [...board.children].map((element) => [element.dataset.instanceId, element]),
-  );
-
-  const game = createGame(deck, {
+  const game = createGame(createDeck(), {
     onChange(changedIds) {
       changedIds.forEach((id) => updateCard(cardElements.get(id), game.getCard(id), game.getStatus(id)));
       updateStats(stats, game.state);
     },
   });
+
+  // Replaces the cards inside the existing board; listeners stay on the board itself.
+  function renderBoard() {
+    const elements = createCards(game.state.deck);
+    cardElements.clear();
+    elements.forEach((element) => cardElements.set(element.dataset.instanceId, element));
+    board.replaceChildren(...elements);
+    updateStats(stats, game.state);
+  }
+
+  function startNewGame() {
+    game.reset(createDeck());
+    renderBoard();
+  }
 
   board.addEventListener('click', (event) => {
     const cardElement = event.target.closest('.card');
@@ -27,9 +44,11 @@ function init() {
     }
   });
 
+  renderBoard();
+
   document.body.append(
     createElement('div', { className: 'app' }, [
-      createHeader(),
+      createHeader({ onNewGame: startNewGame }),
       createElement('main', { className: 'main' }, [stats, board]),
     ]),
   );

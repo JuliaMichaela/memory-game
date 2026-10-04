@@ -1,14 +1,17 @@
 import { createElement } from './dom.js';
 
-export function createHeader() {
+export function createHeader({ onNewGame } = {}) {
+  const newGameButton = createElement('button', {
+    className: 'button button--primary',
+    text: 'New Game',
+    attrs: { type: 'button' },
+  });
+  newGameButton.addEventListener('click', () => onNewGame?.());
+
   return createElement('header', { className: 'header' }, [
     createElement('h1', { className: 'header__title', text: 'Memory Game' }),
     createElement('div', { className: 'header__actions' }, [
-      createElement('button', {
-        className: 'button button--primary',
-        text: 'New Game',
-        attrs: { type: 'button' },
-      }),
+      newGameButton,
       createElement('button', {
         className: 'button',
         text: 'Leaderboard',
@@ -80,10 +83,10 @@ export function createCard(card) {
   return element;
 }
 
+export function createCards(deck) {
+  return deck.map((card) => createCard(card));
+}
+
 export function createBoard(deck) {
-  return createElement(
-    'div',
-    { className: 'board' },
-    deck.map((card) => createCard(card)),
-  );
+  return createElement('div', { className: 'board' }, createCards(deck));
 }

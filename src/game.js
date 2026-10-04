@@ -15,21 +15,32 @@ export const MISMATCH_DELAY_MS = 1000;
  * @param {(changedIds: string[]) => void} [callbacks.onChange] cards (or counters) changed
  * @param {(result: {moves: number}) => void} [callbacks.onComplete] all pairs are found
  * @param {number} [callbacks.mismatchDelay] ms a mismatched pair stays visible
+ *
+ * `reset(newDeck)` starts a new game on the same instance: it cancels the pending
+ * mismatch timer and clears all state, so the old game can no longer fire anything.
  */
 export function createGame(deck, { onChange, onComplete, mismatchDelay = MISMATCH_DELAY_MS } = {}) {
-  const cardsById = new Map(deck.map((card) => [card.instanceId, card]));
+  let cardsById;
+  const state = {};
 
-  const state = {
-    deck,
-    statuses: new Map(deck.map((card) => [card.instanceId, CARD_STATUS.CLOSED])),
-    firstCard: null,
-    locked: false,
-    moves: 0,
-    pairs: 0,
-    totalPairs: deck.length / 2,
-    mismatchTimerId: null,
-    finished: false,
-  };
+  function reset(newDeck) {
+    clearTimeout(state.mismatchTimerId);
+    cardsById = new Map(newDeck.map((card) => [card.instanceId, card]));
+
+    Object.assign(state, {
+      deck: newDeck,
+      statuses: new Map(newDeck.map((card) => [card.instanceId, CARD_STATUS.CLOSED])),
+      firstCard: null,
+      locked: false,
+      moves: 0,
+      pairs: 0,
+      totalPairs: newDeck.length / 2,
+      mismatchTimerId: null,
+      finished: false,
+    });
+  }
+
+  reset(deck);
 
   function notify(changedIds) {
     onChange?.(changedIds);
@@ -79,16 +90,20 @@ export function createGame(deck, { onChange, onComplete, mismatchDelay = MISMATC
     }
 
     state.locked = true;
-    state.mismatchTimerId = setTimeout(
-      () => closeMismatchedPair(first.instanceId, instanceId),
-      mismatchDelay,
-    );
+    const timerId = setTimeout(() => {
+      // Ignore a timer that belongs to a game which has already been reset.
+      if (state.mismatchTimerId === timerId) {
+        closeMismatchedPair(first.instanceId, instanceId);
+      }
+    }, mismatchDelay);
+    state.mismatchTimerId = timerId;
     notify([first.instanceId, instanceId]);
   }
 
   return {
     state,
     selectCard,
+    reset,
     getCard: (instanceId) => cardsById.get(instanceId),
     getStatus: (instanceId) => state.statuses.get(instanceId),
   };
