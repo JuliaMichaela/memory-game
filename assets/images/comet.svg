@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img">
+  <title>Comet</title>
+  <path d="M68 32 L6 54 L46 92 Z" fill="#90e0ef" opacity="0.6"/>
+  <path d="M66 36 L22 56 L46 80 Z" fill="#48cae4"/>
+  <circle cx="72" cy="28" r="18" fill="#0077b6"/>
+  <circle cx="66" cy="22" r="5" fill="#caf0f8"/>
+</svg>

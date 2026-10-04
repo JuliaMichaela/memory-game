@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img">
+  <title>UFO</title>
+  <path d="M34 46 A16 16 0 0 1 66 46 Z" fill="#9ef01a" stroke="#38b000" stroke-width="3"/>
+  <ellipse cx="50" cy="52" rx="42" ry="14" fill="#8d99ae" stroke="#2b2d42" stroke-width="3"/>
+  <circle cx="26" cy="54" r="3.5" fill="#ffd60a"/>
+  <circle cx="50" cy="58" r="3.5" fill="#ffd60a"/>
+  <circle cx="74" cy="54" r="3.5" fill="#ffd60a"/>
+  <path d="M38 68 L28 90 M50 70 V92 M62 68 L72 90" stroke="#ffd60a" stroke-width="4" stroke-linecap="round"/>
+</svg>
