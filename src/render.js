@@ -1,10 +1,11 @@
 import { createElement } from './dom.js';
+import { formatDate } from './results.js';
 
 export function createHeader({ onNewGame, onLeaderboard } = {}) {
   const newGameButton = createElement('button', {
     className: 'button button--primary',
     text: 'New Game',
-    attrs: { type: 'button' },
+    attrs: { type: 'button', 'data-action': 'new-game' },
   });
   newGameButton.addEventListener('click', () => onNewGame?.());
 
@@ -92,4 +93,39 @@ export function createCards(deck) {
 
 export function createBoard(deck) {
   return createElement('div', { className: 'board' }, createCards(deck));
+}
+
+export function createVictoryContent(moves) {
+  return createElement('p', {
+    className: 'modal__text',
+    text: `You found all pairs in ${moves} moves.`,
+  });
+}
+
+/** Leaderboard body: a table of the given (already sorted) results or an empty-state message. */
+export function createLeaderboardContent(results) {
+  if (results.length === 0) {
+    return createElement('p', { className: 'modal__text', text: 'No results yet' });
+  }
+
+  const headerRow = createElement(
+    'tr',
+    {},
+    ['Place', 'Moves', 'Date'].map((label) =>
+      createElement('th', { text: label, attrs: { scope: 'col' } }),
+    ),
+  );
+
+  const rows = results.map((result, index) =>
+    createElement('tr', {}, [
+      createElement('th', { text: String(index + 1), attrs: { scope: 'row' } }),
+      createElement('td', { text: String(result.moves) }),
+      createElement('td', { text: formatDate(result.completedAt) }),
+    ]),
+  );
+
+  return createElement('table', { className: 'leaderboard', attrs: { 'aria-label': 'Best results' } }, [
+    createElement('thead', {}, [headerRow]),
+    createElement('tbody', {}, rows),
+  ]);
 }

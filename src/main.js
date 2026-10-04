@@ -7,10 +7,13 @@ import {
   createBoard,
   createCards,
   createHeader,
+  createLeaderboardContent,
   createStats,
+  createVictoryContent,
   updateCard,
   updateStats,
 } from './render.js';
+import { loadResults, saveResult } from './results.js';
 
 function init() {
   const modal = createModal();
@@ -18,10 +21,18 @@ function init() {
   const board = createBoard([]);
   const cardElements = new Map();
 
+  const header = createHeader({ onNewGame: startNewGame, onLeaderboard: showLeaderboard });
+  const newGameButton = header.querySelector('[data-action="new-game"]');
+
   const game = createGame(createDeck(), {
     onChange(changedIds) {
       changedIds.forEach((id) => updateCard(cardElements.get(id), game.getCard(id), game.getStatus(id)));
       updateStats(stats, game.state);
+    },
+    // Called by the game exactly once per finished game.
+    onComplete({ moves }) {
+      saveResult({ moves });
+      showVictory(moves);
     },
   });
 
@@ -39,10 +50,29 @@ function init() {
     renderBoard();
   }
 
+  function showVictory(moves) {
+    modal.open({
+      title: 'Congratulations!',
+      content: createVictoryContent(moves),
+      actions: [
+        {
+          text: 'New Game',
+          primary: true,
+          onClick() {
+            modal.close();
+            startNewGame();
+          },
+        },
+        { text: 'Close' },
+      ],
+      returnFocus: newGameButton,
+    });
+  }
+
   function showLeaderboard(returnFocus) {
     modal.open({
       title: 'Leaderboard',
-      content: createElement('p', { className: 'modal__text', text: 'No results yet' }),
+      content: createLeaderboardContent(loadResults()),
       actions: [{ text: 'Close', primary: true }],
       returnFocus,
     });
@@ -59,7 +89,7 @@ function init() {
 
   document.body.append(
     createElement('div', { className: 'app' }, [
-      createHeader({ onNewGame: startNewGame, onLeaderboard: showLeaderboard }),
+      header,
       createElement('main', { className: 'main' }, [stats, board]),
     ]),
   );
