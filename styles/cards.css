@@ -21,7 +21,7 @@
     box-shadow 0.15s;
 }
 
-.card:hover {
+.card:not(.matched):hover {
   border-color: var(--accent-hover);
   box-shadow: 0 0 14px rgba(124, 92, 255, 0.55);
   transform: translateY(-2px);
@@ -60,7 +60,6 @@
   object-fit: contain;
 }
 
-/* States prepared for the game logic (stage 4+). */
 .card.opened .card__face--back,
 .card.matched .card__face--back {
   display: none;

@@ -58,9 +58,11 @@ export function updateCard(element, card, status) {
   if (isMatched) {
     element.setAttribute('aria-label', `${card.name}, matched`);
     element.setAttribute('aria-disabled', 'true');
+    element.setAttribute('tabindex', '-1');
   } else {
     element.setAttribute('aria-label', isOpened ? card.name : 'Hidden card');
     element.removeAttribute('aria-disabled');
+    element.setAttribute('tabindex', '0');
   }
 }
 
@@ -77,7 +79,7 @@ export function createCard(card) {
     'button',
     {
       className: 'card',
-      attrs: { type: 'button', 'aria-label': 'Hidden card' },
+      attrs: { type: 'button', 'aria-label': 'Hidden card', tabindex: '0' },
     },
     [back, front],
   );

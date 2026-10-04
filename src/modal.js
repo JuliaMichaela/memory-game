@@ -2,6 +2,7 @@ import { createElement } from './dom.js';
 
 const TITLE_ID = 'modal-title';
 const SCROLL_LOCK_CLASS = 'scroll-locked';
+const IDLE_TITLE = 'Dialog';
 
 /**
  * Creates the one shared modal shell (a <dialog>) and appends it to the page.
@@ -20,7 +21,12 @@ const SCROLL_LOCK_CLASS = 'scroll-locked';
  * for every way of closing (close() directly, Escape via the `close` event).
  */
 export function createModal() {
-  const title = createElement('h2', { className: 'modal__title', attrs: { id: TITLE_ID } });
+  // The heading is never empty: it holds a neutral text while the modal is closed.
+  const title = createElement('h2', {
+    className: 'modal__title',
+    text: IDLE_TITLE,
+    attrs: { id: TITLE_ID },
+  });
   const body = createElement('div', { className: 'modal__body' });
   const actionsBar = createElement('div', { className: 'modal__actions' });
   const windowElement = createElement('div', { className: 'modal__window' }, [title, body, actionsBar]);
@@ -39,6 +45,7 @@ export function createModal() {
     }
 
     document.body.classList.remove(SCROLL_LOCK_CLASS);
+    title.textContent = IDLE_TITLE;
     body.replaceChildren();
     actionsBar.replaceChildren();
 
@@ -77,6 +84,7 @@ export function createModal() {
     returnFocusTarget = returnFocus ?? document.activeElement;
     document.body.classList.add(SCROLL_LOCK_CLASS);
     dialog.showModal();
+    body.scrollTop = 0;
     buttons[initialFocus]?.focus();
   }
 

@@ -6,6 +6,9 @@
   --muted: #a9b0e0;
   --accent: #7c5cff;
   --accent-hover: #9479ff;
+  --primary: #6446dc;
+  --primary-hover: #6d50e8;
+  --primary-active: #4f34c0;
   --focus: #ffd60a;
   --gap: clamp(8px, 2.4vw, 16px);
 }
@@ -85,12 +88,18 @@ body {
 }
 
 .button--primary {
-  border-color: var(--accent);
-  background: var(--accent);
+  border-color: var(--primary);
+  background: var(--primary);
 }
 
 .button--primary:hover {
-  background: var(--accent-hover);
+  border-color: var(--primary-hover);
+  background: var(--primary-hover);
+}
+
+.button--primary:active {
+  border-color: var(--primary-active);
+  background: var(--primary-active);
 }
 
 .button:focus-visible {
@@ -147,5 +156,17 @@ body {
   .header__actions {
     flex-wrap: nowrap;
     justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .card {
+    transition: none;
+  }
+
+  .button:hover,
+  .card:not(.matched):hover {
+    transform: none;
   }
 }
