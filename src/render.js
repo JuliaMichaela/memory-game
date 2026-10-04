@@ -18,18 +18,43 @@ export function createHeader() {
   ]);
 }
 
-function createStat(label, value) {
+function createStat(name, label, value) {
+  const valueElement = createElement('span', { className: 'stat__value', text: value });
+  valueElement.dataset.stat = name;
+
   return createElement('p', { className: 'stat' }, [
     createElement('span', { className: 'stat__label', text: `${label}:` }),
-    createElement('span', { className: 'stat__value', text: value }),
+    valueElement,
   ]);
 }
 
 export function createStats(totalPairs) {
   return createElement('div', { className: 'stats' }, [
-    createStat('Moves', '0'),
-    createStat('Pairs', `0 / ${totalPairs}`),
+    createStat('moves', 'Moves', '0'),
+    createStat('pairs', 'Pairs', `0 / ${totalPairs}`),
   ]);
+}
+
+export function updateStats(statsElement, { moves, pairs, totalPairs }) {
+  statsElement.querySelector('[data-stat="moves"]').textContent = String(moves);
+  statsElement.querySelector('[data-stat="pairs"]').textContent = `${pairs} / ${totalPairs}`;
+}
+
+/** Syncs one card element with its game status (class + accessible name). */
+export function updateCard(element, card, status) {
+  const isOpened = status === 'opened';
+  const isMatched = status === 'matched';
+
+  element.classList.toggle('opened', isOpened);
+  element.classList.toggle('matched', isMatched);
+
+  if (isMatched) {
+    element.setAttribute('aria-label', `${card.name}, matched`);
+    element.setAttribute('aria-disabled', 'true');
+  } else {
+    element.setAttribute('aria-label', isOpened ? card.name : 'Hidden card');
+    element.removeAttribute('aria-disabled');
+  }
 }
 
 export function createCard(card) {
