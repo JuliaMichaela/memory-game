@@ -47,7 +47,7 @@ Then open <http://localhost:8000> in your browser.
 
 ## Deployment
 
-Deployment link will be added after GitHub Pages setup.
+[Memory Game deployment](https://juliamichaela.github.io/memory-game/)
 
 ## Project structure
 
