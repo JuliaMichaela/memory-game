@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img">
+  <title>Astronaut</title>
+  <rect x="26" y="52" width="48" height="38" rx="14" fill="#f8f9fa" stroke="#6c757d" stroke-width="3"/>
+  <rect x="42" y="64" width="16" height="10" rx="2" fill="#2a9d8f"/>
+  <circle cx="50" cy="34" r="26" fill="#f8f9fa" stroke="#6c757d" stroke-width="3"/>
+  <rect x="33" y="22" width="34" height="24" rx="12" fill="#1d3557"/>
+  <path d="M40 30 Q44 26 50 27" fill="none" stroke="#a8dadc" stroke-width="3" stroke-linecap="round"/>
+</svg>

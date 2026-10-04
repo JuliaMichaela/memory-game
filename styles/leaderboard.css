@@ -1,0 +1,33 @@
+.leaderboard {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.leaderboard th,
+.leaderboard td {
+  padding: 8px 6px;
+  text-align: center;
+}
+
+.leaderboard thead th {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.leaderboard tbody th {
+  font-weight: 700;
+}
+
+.leaderboard tbody tr + tr {
+  border-top: 1px solid rgba(43, 52, 112, 0.5);
+}
+
+.leaderboard tbody tr:first-child th {
+  color: var(--focus);
+}
